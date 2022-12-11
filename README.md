@@ -243,3 +243,50 @@ ggplot(oneway_anova, aes(x = Group, y = Length)) +
 ```
 ![image](https://user-images.githubusercontent.com/91018876/206920681-0668d1b5-e32b-491d-b36b-c2e6be248320.png)
 
+5.(Anova dua arah) 
+Data yang digunakan merupakan hasil eksperimen yang dilakukan untuk mengetahui pengaruh suhu operasi (100˚C, 125˚C dan 150˚C) dan tiga jenis kaca pelat muka (A, B dan C) pada keluaran cahaya tabung osiloskop. Percobaan dilakukan sebanyak 27 kali dan didapat data sebagai berikut: Data Hasil Eksperimen. Dengan data tersebut: 
+
+a. Buatlah plot sederhana untuk visualisasi data 
+```R
+Membaca dari csv file
+tabel = read.csv("D:\\Kuliah\\SEM 3\\Probabilitas dan Statistika\\Praktikum\\2\\GTL.csv")
+
+head(tabel)
+str(tabel)
+```
+![image](https://user-images.githubusercontent.com/91018876/206921400-65b3bced-80ea-40fd-8630-d8c64b46fbfc.png) ![image](https://user-images.githubusercontent.com/91018876/206921416-1ab737a6-7faf-4a80-9ca1-90b2aba1b15e.png)
+
+```R
+Plot sederhana
+
+qplot(x = Temp, y = Light, geom = "point", data = tabel) + facet_grid(.~Glass, labeller = label_both)
+```
+![image](https://user-images.githubusercontent.com/91018876/206921434-04c6be8f-197c-4b1c-9a54-8c7b63a2a986.png)
+
+b. Lakukan uji ANOVA dua arah untuk 2 faktor
+```R
+Set tabel menjadi factor
+tabel$Glass <- as.factor(tabel$Glass)
+tabel$Temp <- as.factor(tabel$Temp)
+```
+```R
+Uji ANOVA 2 arah
+anova <- aov(Light ~ Glass*Temp, data=tabel)
+summary(anova)
+```
+![image](https://user-images.githubusercontent.com/91018876/206921566-9d5e902d-6bdd-4d68-94a9-f38d3ae184e5.png)
+
+c. Tampilkan tabel dengan mean dan standar deviasi keluaran cahaya untuk setiap perlakuan (kombinasi kaca pelat muka dan suhu operasi)
+
+```R
+library(magrittr)
+library(dplyr)
+summary <- group_by(tabel, Glass, Temp) %>%
+  summarise(mean=mean(Light), sd=sd(Light)) %>%
+  arrange(desc(mean))
+print(summary)
+```
+![image](https://user-images.githubusercontent.com/91018876/206921841-ae129b43-14e7-403c-bfd5-7f142379c514.png)
+
+d.
+
