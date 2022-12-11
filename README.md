@@ -197,4 +197,49 @@ qqline(group3$Length)
 ```
 ![image](https://user-images.githubusercontent.com/91018876/206919410-c99f11bd-5993-445c-9c90-6c065f7bd796.png)
 
+b. Carilah atau periksalah Homogeneity of variances nya , Berapa nilai p yang didapatkan? , Apa hipotesis dan kesimpulan yang dapat diambil ?
+
+```R
+Untuk memeriksa homogenitas varians dilakukan seperti berikut
+
+bartlett.test(oneway_anova$Length, oneway_anova$Group)
+```
+![image](https://user-images.githubusercontent.com/91018876/206919509-3ea9edf6-c884-4e31-83ab-19a4a1babac7.png)
+
+```
+P-value sebesar 0.8054 > 0.05 ,sehingga varians dari ketiga kelompok sama.
+Oleh karena itu, terdapat homogenitas varians untuk melakukan anova satu arah (one way).
+```
+c. Untuk uji ANOVA, buatlah model linier dengan Panjang versus Grup dan beri nama model tersebut model 1.
+
+```R
+model1 = lm(Length ~ Group, data = oneway_anova)
+anova(model1)
+```
+![image](https://user-images.githubusercontent.com/91018876/206919614-5c435bcd-03cf-48d1-9b56-6d1d2555c17a.png)
+
+d. Dari Hasil Poin C , Berapakah nilai-p ? ,  Apa yang dapat Anda simpulkan dari H0?
+```
+F-value = 7.0982, yang menunjukkan nilai P-value < 0.05. 
+Kesimpulannya tolak H0, sehingga terbukti bahwa adanya perbedaan panjang antara ketiga spesies atau terdapat rata-rata panjangnya yang berbeda dengan yang lainnya.
+```
+
+e. Verifikasilah jawaban model 1 dengan Post-hooc test TukeyHSD ,  dari nilai p yang didapatkan apakah satu jenis kucing lebih panjang dari yang lain? Jelaskan.
+```R
+TukeyHSD(aov(model1))
+```
+![image](https://user-images.githubusercontent.com/91018876/206919852-25c67cf0-d61b-4a2a-a6c4-f1821f32de68.png)
+```
+Jika perbandingan antar spesies kucing memiliki nilai p > 0.05, maka kedua spesies memiliki panjang yang sama dan juga sebaliknya. 
+Contoh: hasil kucing putih dan kucing oren memiliki panjang sama p = 0.8726158. Sedangkan kucing hitam dengan kucing oren memiliki panjang yang berbeda p = 0.0020955. 
+```
+
+f. Visualisasikan data dengan ggplot2
+```R
+
+ggplot(oneway_anova, aes(x = Group, y = Length)) +
+  geom_boxplot(fill= "grey", color = c("#FFA500", "#000000","#FFFFFF")) +
+  scale_x_discrete() + xlab("Group") + ylab("Length (cm)")
+```
+![image](https://user-images.githubusercontent.com/91018876/206920681-0668d1b5-e32b-491d-b36b-c2e6be248320.png)
 
