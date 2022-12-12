@@ -281,12 +281,36 @@ c. Tampilkan tabel dengan mean dan standar deviasi keluaran cahaya untuk setiap 
 ```R
 library(magrittr)
 library(dplyr)
-summary <- group_by(tabel, Glass, Temp) %>%
+data_sum <- group_by(tabel, Glass, Temp) %>%
   summarise(mean=mean(Light), sd=sd(Light)) %>%
   arrange(desc(mean))
-print(summary)
+print(data_sum)
 ```
 ![image](https://user-images.githubusercontent.com/91018876/206921841-ae129b43-14e7-403c-bfd5-7f142379c514.png)
 
-d.
+d. Lakukan uji Tukey
+```R
+tukey <- TukeyHSD(anova)
+print(tukey)
+```
+![image](https://user-images.githubusercontent.com/91018876/206990417-8c33e7ea-d9e4-4fcc-a83d-3c8fca42f098.png)
 
+e. Gunakan compact letter display untuk menunjukkan perbedaan signifikan antara uji Anova dan uji Tukey
+
+```R
+Membuat compact letter display
+install.packages("multcompView")
+library(multcompView)
+
+tukey.cld <- multcompLetters4(anova, tukey)
+print(tukey.cld)
+```
+![image](https://user-images.githubusercontent.com/91018876/206992148-35ea1c66-17ad-4bd7-bdc9-119034f4fdaa.png)
+
+```R
+Menambahkan means dan sd pada tabel compact letter display
+cld <- as.data.frame.list(tukey.cld$`Glass:Temp_Factor`)
+data_sum$Tukey <- cld$Letters
+print(data_sum)
+```
+![image](https://user-images.githubusercontent.com/91018876/206992390-46200bf3-5fc1-40ac-b4a9-977bc09a285a.png)
